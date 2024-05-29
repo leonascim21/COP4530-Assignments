@@ -27,7 +27,7 @@ int main()
   std::string user_input;
   std::getline(std::cin, user_input);
 
-  while(user_input != "^D")
+  do
   {
 
     std::list<City> matches_list;
@@ -44,10 +44,10 @@ int main()
         //FORMATTED_FILE_INPUT HOLDS THE FIRST N CHARACTERS OF THE NAME OF THE LINE READ IN
         //DEPENDING ON THE SIZE OF THE USER INPUT
         std::string formatted_file_input = file_input.substr(15);
-        formatted_file_input = formatted_file_input.substr(0, user_input.size());
+        formatted_file_input = formatted_file_input.substr(0, user_input.size());\
 
         //FOR FIRST 10 MATCHES ADD THEM TO THE END LIST
-        if(formatted_file_input == user_input && ++i<10)
+        if(formatted_file_input == user_input && i++<10)
         {
           City match(file_input.substr(15), DeleteWhiteSpace(file_input.substr(0,15)));
           matches_list.push_back(match);
@@ -64,11 +64,12 @@ int main()
 
 
     std::cout << "\nAnother City? (use CTRL-D to exit)\n\n";
-    std::cin >> user_input;
-    //RESET FILE
+   
+     //RESET FILE
     infile.close();
     infile.open(filename);
-  }
+
+  }while(std::getline(std::cin, user_input));
 
   return 0;
 }
