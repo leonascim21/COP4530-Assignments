@@ -6,20 +6,40 @@
 
 std::string DeleteWhiteSpace(std::string s);
 
-int main()
+int main(int argc, char* argv[])
 {
+
+  //END PROGRAM IF INVALID NUMBER OF ARGUMENTS IS PROVIDED
+  if(argc != 3)
+  {
+    std::cout << "Invalid number of arguments.\n";
+    return 1;
+  }
+
+  //CHECK IF LAST ARGUMENT IS A NUMBER
+  int limit;
+  try
+  {
+    limit = std::stoi(argv[2]);
+  }
+  catch (const std::invalid_argument&)
+  {
+    std::cout << "Last argument must be an integer.\n";
+    return 1;
+  }
+
+
+
   //OPEN INPUT FILE
   std::ifstream infile;
-  std::cout << "Enter the name of the input file?\n>";
-  std::string filename;
-  std::cin >> filename;
+  std::string filename = argv[1];
   infile.open(filename);
-  std::cin.ignore();
+  //std::cin.ignore();
 
   //END PROGRAM IF FILE IS NOT FOUND
   if (!infile.is_open())
   {
-    std::cout << "Error: Unable to open file. \n";
+    std::cout << "Error: Unable to open file.\n";
     return 1;
   }
 
@@ -47,7 +67,7 @@ int main()
         formatted_file_input = formatted_file_input.substr(0, user_input.size());\
 
         //FOR FIRST 10 MATCHES ADD THEM TO THE END LIST
-        if(formatted_file_input == user_input && i++<10)
+        if(formatted_file_input == user_input && i++<limit)
         {
           City match(file_input.substr(15), DeleteWhiteSpace(file_input.substr(0,15)));
           matches_list.push_back(match);

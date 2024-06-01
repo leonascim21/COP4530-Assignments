@@ -1,7 +1,3 @@
-//
-// Created by leona on 5/22/2024.
-//
-
 #include "city.h"
 
 std::ostream &operator<<(std::ostream &s, const City &c)

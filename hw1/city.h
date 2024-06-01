@@ -1,7 +1,3 @@
-//
-// Created by leona on 5/22/2024.
-//
-
 #ifndef CITY_H
 #define CITY_H
 
