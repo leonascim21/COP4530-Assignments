@@ -133,15 +133,19 @@ int main()
 {
   binary_search_tree<int> bst;
   int x;
+  int count = 0;
 
   while(cin >> x)
   {
     bst.insert(x);
+    count++;
   }
 
   bst.print();
 
-  cout << "Minimal element = " << bst.min() << "\n";
-  cout << "Maximal element = " << bst.max() << "\n";
-
+  if(count)
+  {
+    cout << "Minimal element = " << bst.min() << "\n";
+    cout << "Maximal element = " << bst.max() << "\n";
+  }
 }
