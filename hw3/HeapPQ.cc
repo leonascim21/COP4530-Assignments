@@ -17,56 +17,37 @@ public:
 
   const T& findMax( )
   {
-    return heap[1];
+    return heap_findMax();
   }
 
   void insert( const T& x )
   {
-    heap_ptr++;
-
-    if(heap_ptr < heap.size())
-      heap[heap_ptr] = x;
-    else
-      heap.push_back(x);
-    heap_property_up(heap_ptr);
-
+    heap_insert(x);
   }
 
   void remove( )
   {
-    swap(heap[1], heap[--heap_ptr]);
-    heap_property_down(1);
-    heap.pop_back();
+    heap_remove();
   }
 
   void print( )
   {
-    for (uint32_t i = 0; i < heap_ptr; i++)
-      cout << i << ":" << heap[i] << "\n";
+    heap_print();
   }
 
   void property_validate()
   {
-    for(int i = 2; i < heap_ptr; i++)
-    {
-      if(heap[i] > heap[i/2])
-      {
-        cout << "Heap property violations found." << endl;
-        return;
-      }
-    }
-    cout << "No heap property violations found." << endl;
-
+    heap_property_validate();
   }
 
   void reserve(uint32_t size)
   {
-    heap.reserve(size + 1);
+    heap_reserve(size);
   }
 
   uint32_t quantity()
   {
-    return heap_ptr-1;
+    return heap_quantity();
   }
 
 private:
@@ -76,37 +57,68 @@ private:
 
   T& heap_findMax()
   {
-    /* YOUR CODE GOES HERE */
+    return heap[1];
   }
 
   void heap_insert ( const T& x )
   {
-    /* YOUR CODE GOES HERE */
+    if(heap_ptr < heap.size())
+      heap[heap_ptr] = x;
+    else
+      heap.push_back(x);
+
+    heap_property_up(heap_ptr);
+    heap_ptr++;
+
+
   }
 
   void heap_remove ( )
   {
-    /* YOUR CODE GOES HERE */
+    if(heap_ptr <= 1)
+      return;
+
+    heap_ptr--;
+    swap(heap[1], heap[heap_ptr]);
+    heap_property_down(1);
   }
 
   void heap_print( )
   {
-    /* YOUR CODE GOES HERE */
+    cout << "Heap\n";
+    for (int i = 0; i < heap_ptr; i++)
+      cout << i << ": " << heap[i] << "\n";
   }
 
   void heap_property_validate()
   {
-    /* YOUR CODE GOES HERE */
+    bool valid = true;
+
+    for (int i = 1; i < heap_ptr/2; i++)
+    {
+      if(heap[i] < heap[i*2] && heap[i] < heap[i*2+1])
+      {
+        valid = false;
+        break;
+      }
+    }
+
+    if(valid)
+      cout << "No heap property violations found.\n\n";
+    else
+      cout << "Heap property violations found.\n\n";
+
   }
 
   void heap_reserve(uint32_t size)
   {
-    /* YOUR CODE GOES HERE */
+    if (size > heap_ptr)
+      heap.resize(size, 0);
   }
 
   uint32_t heap_quantity()
   {
-    /* YOUR CODE GOES HERE */
+    return heap_ptr-1;
   }
 
 
@@ -118,31 +130,35 @@ private:
 
   void heap_property_up(uint32_t item)
   {
-    while(item > 1 && heap[item] > heap[item/2])
-    {
-      swap(heap[item], heap[item/2]);
-      item /= 2;
-    }
+    if(heap[item] < heap[item / 2] || item <= 1)
+      return;
+    else
+      swap(heap[item], heap[item / 2]);
+
+    item/=2;
+
+    (heap_property_up(item));
+
   }
 
   void heap_property_down(T item)
   {
-    int child;
-    while(2 * item < heap_ptr)
-    {
-      child = 2 * item;
-      if(child != heap_ptr - 1 && (heap[child] < heap[child+1]))
-      {
-        child++;
-      }
+    if(item * 2 >= heap_ptr)
+      return;
 
-      if(heap[item] >= heap[child])
-        break;
+    int child = 2 * item;
 
-      swap(heap[item], heap[child]);
-      item = child;
+    if(heap[child+1] > heap[child] && (child + 1 < heap_ptr) )
+      ++child;
 
-    }
+    if(heap[item] > heap[child])
+      return;
+
+    swap(heap[item], heap[child]);
+    item = child;
+
+    heap_property_down(item);
+
   }
 };
 
