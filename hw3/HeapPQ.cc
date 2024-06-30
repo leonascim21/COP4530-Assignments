@@ -96,7 +96,7 @@ private:
 
     for (int i = 1; i < heap_ptr/2; i++)
     {
-      if(heap[i] < heap[i*2] && heap[i] < heap[i*2+1])
+      if(heap[i] < heap[i*2] || heap[i] < heap[i*2+1])
       {
         valid = false;
         break;
