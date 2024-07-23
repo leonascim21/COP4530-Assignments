@@ -15,14 +15,15 @@ public:
   void insert(const std::string & key, const std::string & value)
   {
     Node* newNode = insert(value, root);
-    heapify_up(newNode);
+    heapifyUp(newNode);
   }
 
   void enumerate(std::ostream& output_file)
   {
-    while (root != nullptr) {
+    while (root != nullptr)
+    {
       output_file << root->data << "\n";
-      remove_root();
+      removeRoot();
     }
   }
 
@@ -61,52 +62,48 @@ private:
     return insert(value, node->right, node);
   }
 
-  void enumerate(std::ostream& output_file, Node* node)
+  void heapifyUp(Node* node)
   {
-
-  }
-
-  void heapify_up(Node* node)
-  {
-    if (node == nullptr || node->parent == nullptr) {
+    if (node == nullptr || node->parent == nullptr)
       return;
-    }
-    if (node->data < node->parent->data) {
+
+    if (node->data < node->parent->data)
+    {
       std::swap(node->data, node->parent->data);
-      heapify_up(node->parent);
+      heapifyUp(node->parent);
     }
   }
 
-  void heapify_down(Node* node)
+  void heapifyDown(Node* node)
   {
-    if (node == nullptr) {
+    if (node == nullptr)
       return;
-    }
 
     Node* smallest = node;
 
-    if (node->left != nullptr && node->left->data < smallest->data) {
+    if (node->left != nullptr && node->left->data < smallest->data)
       smallest = node->left;
-    }
 
-    if (node->right != nullptr && node->right->data < smallest->data) {
+    if (node->right != nullptr && node->right->data < smallest->data)
       smallest = node->right;
-    }
 
-    if (smallest != node) {
+    if (smallest != node)
+    {
       std::swap(node->data, smallest->data);
-      heapify_down(smallest);
+      heapifyDown(smallest);
     }
   }
 
-  void remove_root()
+  void removeRoot()
   {
-    if (root == nullptr) {
+    if (root == nullptr)
+    {
       return;
     }
 
-    Node* last_node = get_last_node(root);
-    if (last_node == root) {
+    Node* last_node = getLastNode(root);
+    if (last_node == root)
+    {
       delete root;
       root = nullptr;
       return;
@@ -114,34 +111,34 @@ private:
 
     std::swap(root->data, last_node->data);
 
-    if (last_node->parent->left == last_node) {
+    if (last_node->parent->left == last_node)
+    {
       last_node->parent->left = nullptr;
       last_node->parent->left_count--;
-    } else {
+    }
+    else
+    {
       last_node->parent->right = nullptr;
       last_node->parent->right_count--;
     }
 
     delete last_node;
-    heapify_down(root);
+    heapifyDown(root);
   }
 
-  Node* get_last_node(Node* node)
+  Node* getLastNode(Node* node)
   {
-    if (node == nullptr) {
+    if (node == nullptr)
       return nullptr;
-    }
 
-    if (node->left == nullptr && node->right == nullptr) {
+    if (node->left == nullptr && node->right == nullptr)
       return node;
-    }
 
-    Node* left_last = get_last_node(node->left);
-    Node* right_last = get_last_node(node->right);
+    Node* left_last = getLastNode(node->left);
+    Node* right_last = getLastNode(node->right);
 
-    if (right_last != nullptr) {
+    if (right_last != nullptr)
       return right_last;
-    }
 
     return left_last;
   }
