@@ -12,68 +12,67 @@ class Sort::ImplSort
   /* ----- YOUR CODE GOES IN BETWEEN THESE COMMENTS ----- */
   /* vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv */
 public:
-
   ImplSort() : root(nullptr) {}
 
   void insert(const std::string & key, const std::string & value)
   {
-
+    insert(key,key.substr(0, 10), root, 0);
   }
 
   void enumerate(std::ostream& output_file)
   {
-
+    enumerate(root, output_file);
   }
 
 private:
-  struct Node {
+  struct Node
+  {
     bool isWord;
-    bool hasData;
     std::string data;
     Node* children[26];
 
-    Node() : hasData(false), isWord(false)
+    Node() : isWord(false), data("")
     {
-      for (int i = 0; i < 26; ++i)
-      {
+      for (int i = 0; i < 26; i++)
         children[i] = nullptr;
-      }
     }
-
   };
 
   Node* root;
 
-
-  void insert(const std::string& str, Node*& node, int count)
+  void insert(const std::string& str, const std::string& subSrting, Node*& node, int count)
   {
     if (node == nullptr)
+      node = new Node();
+
+    if (count == subSrting.length())
     {
-      node = new Node;
+      node->isWord = true;
+      node->data = str;
+      return;
     }
 
-    if (count < str.length())
-    {
-      int index = str[count] - 'A';
+    int index = subSrting[count] - 'A';
+    if (!node->children[index])
+      node->children[index] = new Node();
 
-      if (node->children[index] == nullptr)
-      {
-        node->children[index] = new Node;
-        node->children[index]->data = str[count];
-        node->children[index]->hasData = true;
-      }
-
-      if (count + 1 == str.length())
-      {
-        node->children[index]->isWord = true;
-      }
-      else
-      {
-        insert(str, node->children[index], count + 1);
-      }
-    }
+    insert(str, subSrting, node->children[index], count + 1);
   }
 
+  void enumerate(Node* node, std::ostream& output_file)
+  {
+    if (node == nullptr)
+      return;
+
+    if (node->isWord)
+      output_file << node->data << std::endl;
+
+    for (int i = 0; i < 26; i++)
+    {
+      if (node->children[i] != nullptr)
+        enumerate(node->children[i], output_file);
+    }
+  }
 
   /* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
   /* ----- YOUR CODE GOES IN BETWEEN THESE COMMENTS ----- */
